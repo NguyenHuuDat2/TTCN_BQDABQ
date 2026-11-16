@@ -1,49 +1,36 @@
+import { Navigate, Route, Routes } from 'react-router-dom'
+import MainLayout, { menuAdmin } from './layouts/MainLayout'
+import SanPhamPage from './features/san_pham/SanPhamPage'
 
-import { useEffect, useState } from 'react'
-
-function App() {
-  const [message, setMessage] = useState('Đang kết nối...')
-  const [connected, setConnected] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/health')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Backend error')
-        }
-        return response.json()
-      })
-      .then((data) => {
-        setMessage(data.message)
-        setConnected(data.status === 'success')
-      })
-      .catch(() => {
-        setMessage('Không thể kết nối Backend')
-        setConnected(false)
-      })
-  }, [])
-
+function TrangDangXayDung({ tenTrang }: { tenTrang: string }) {
   return (
-    <div style={{
-      textAlign: 'center',
-      padding: '60px',
-      fontFamily: 'Arial'
-    }}>
-      <h1>HỆ THỐNG QUẢN LÝ BÁN HÀNG POS</h1>
-      <h2>React + TypeScript + Spring Boot</h2>
-
-      <p>
-        Trạng thái kết nối:
-        <strong style={{
-          color: connected ? 'green' : 'red'
-        }}>
-          {connected ? ' Thành công' : ' Chưa kết nối'}
-        </strong>
-      </p>
-
-      <p>{message}</p>
-    </div>
+    <main className="p-3 p-md-4">
+      <h1 className="h4 mb-3">{tenTrang}</h1>
+      <p className="text-secondary">Chức năng đang được xây dựng.</p>
+    </main>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route index element={<Navigate to="/san-pham" replace />} />
+
+        {menuAdmin.map((muc) => (
+          <Route
+            key={muc.path}
+            path={muc.path}
+            element={
+              muc.path === '/san-pham'
+                ? <SanPhamPage />
+                : <TrangDangXayDung tenTrang={muc.label} />
+            }
+          />
+        ))}
+
+        <Route path="*" element={<Navigate to="/san-pham" replace />} />
+      </Route>
+    </Routes>
+  )
+}

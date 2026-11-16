@@ -28,6 +28,16 @@ public class DanhMucSanPham {
     @Column(name = "trang_thai", nullable = false, length = 20)
     private String trangThai;
 
+    protected DanhMucSanPham() {
+    }
+
+    public DanhMucSanPham(String maDanhMuc, String tenDanhMuc, String moTa) {
+        this.maDanhMuc = maDanhMuc;
+        this.tenDanhMuc = tenDanhMuc;
+        this.moTa = moTa;
+        this.trangThai = "DANG_DUNG";
+    }
+    
     public Long getId() {
         return id;
     }
@@ -47,4 +57,6 @@ public class DanhMucSanPham {
     public String getTrangThai() {
         return trangThai;
     }
+
+    
 }
