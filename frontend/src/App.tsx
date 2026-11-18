@@ -7,6 +7,9 @@ import DangNhapPage from './features/dang_nhap/DangNhapPage'
 import TaiKhoanPage from './features/tai_khoan/TaiKhoanPage'
 import ChiNhanhPage from './features/chi_nhanh/ChiNhanhPage'
 import TongQuanChiNhanhPage from './features/chi_nhanh/TongQuanChiNhanhPage'
+import CaThuNganPage from './features/ca_thu_ngan/CaThuNganPage'
+import DoiSoatCaPage from './features/ca_thu_ngan/DoiSoatCaPage'
+import QuanLyCaPage from './features/quan_ly_ca/QuanLyCaPage'
 
 import {
   dangXuat,
@@ -115,7 +118,11 @@ export default function App() {
     if (path === '/tai-khoan') return <TaiKhoanPage/>
     if (path === '/chi-nhanh') return <ChiNhanhPage/>
     if (path === '/chi-nhanh/tong-quan') return <TongQuanChiNhanhPage />
+    if (path === '/thu-ngan/ca') return <CaThuNganPage />
+    if (path === '/thu-ngan/doi-soat') return <DoiSoatCaPage />
+    if (path === '/chi-nhanh/quan-ly-ca') {return <QuanLyCaPage />}
 
+    
     return <TrangDangXayDung tenTrang={label} />
   }
 

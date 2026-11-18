@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
@@ -5,6 +6,7 @@ import {
   Bell,
   ChartColumn,
   CircleUserRound,
+  ClipboardCheck,
   Clock3,
   LayoutDashboard,
   LogOut,
@@ -44,6 +46,7 @@ export const menuAdmin: MucMenu[] = [
   { path: '/khuyen-mai', label: 'Khuyến mãi', icon: Tags },
   { path: '/ton-kho', label: 'Tồn kho', icon: Warehouse },
   { path: '/dieu-chuyen', label: 'Điều chuyển', icon: ArrowLeftRight },
+  { path: '/thu-ngan/doi-soat', label: 'Đối soát ca', icon: ClipboardCheck },
   { path: '/bao-cao', label: 'Báo cáo', icon: ChartColumn },
 ]
 
@@ -56,6 +59,12 @@ export const menuThuNgan: MucMenu[] = [
 
 export const menuCuaHangTruong: MucMenu[] = [
   { path: '/chi-nhanh/tong-quan', label: 'Tổng quan', icon: LayoutDashboard },
+  { path: '/thu-ngan/doi-soat', label: 'Đối soát ca', icon: ClipboardCheck },
+  {
+  path: '/chi-nhanh/quan-ly-ca',
+  label: 'Quản lý ca',
+  icon: Clock3,
+},
 ]
 
 export const menuTheoVaiTro: Record<VaiTro, MucMenu[]> = {

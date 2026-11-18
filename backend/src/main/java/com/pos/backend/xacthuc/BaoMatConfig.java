@@ -1,3 +1,4 @@
+
 package com.pos.backend.xacthuc;
 
 import java.util.List;
@@ -59,21 +60,67 @@ public class BaoMatConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+
                 .requestMatchers(HttpMethod.GET, "/api/xac-thuc/csrf").permitAll()
                 .requestMatchers("/api/xac-thuc/toi").authenticated()
 
-                .requestMatchers(HttpMethod.GET,
+                .requestMatchers(
+                        HttpMethod.GET,
                         "/api/san-pham", "/api/san-pham/**",
-                        "/api/danh-muc", "/api/danh-muc/**")
-                    .hasAnyRole("ADMIN", "MANAGER", "CASHIER")
+                        "/api/danh-muc", "/api/danh-muc/**"
+                ).hasAnyRole("ADMIN", "MANAGER", "CASHIER")
 
                 .requestMatchers(
                         "/api/san-pham", "/api/san-pham/**",
                         "/api/danh-muc", "/api/danh-muc/**",
                         "/api/tai-khoan", "/api/tai-khoan/**",
                         "/api/chi-nhanh", "/api/chi-nhanh/**"
-                    )
-                    .hasRole("ADMIN")
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/ban-hang/khach-hang"
+                ).hasRole("CASHIER")
+
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/ban-hang/tien-mat",
+                        "/api/ban-hang/qr"
+                ).hasRole("CASHIER")
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/thu-ngan/phan-cong-cua-toi",
+                        "/api/thu-ngan/phien/hien-tai"
+                ).hasRole("CASHIER")
+
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/thu-ngan/phien/mo",
+                        "/api/thu-ngan/phien/dong"
+                ).hasRole("CASHIER")
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/thu-ngan/doi-soat",
+                        "/api/thu-ngan/doi-soat/**"
+                ).hasAnyRole("ADMIN", "MANAGER")
+
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/thu-ngan/doi-soat/**"
+                ).hasAnyRole("ADMIN", "MANAGER")
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/quan-ly-ca",
+                        "/api/quan-ly-ca/nhan-vien"
+                ).hasRole("MANAGER")
+
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/quan-ly-ca/phan-cong"
+                ).hasRole("MANAGER")
 
                 .requestMatchers("/api/**").denyAll()
                 .anyRequest().permitAll()
