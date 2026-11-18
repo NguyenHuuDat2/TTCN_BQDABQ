@@ -1,3 +1,4 @@
+import { guiYeuCauGhi } from '../dang_nhap/xacThucApi'
 export type SanPham = {
   id: number
   idDanhMuc: number
@@ -23,10 +24,25 @@ export async function layDanhSachSanPham(signal: AbortSignal): Promise<SanPham[]
   return response.json()
 }
 
+export async function traSanPhamTheoMaVach(maVach: string): Promise<SanPham> {
+  const query = new URLSearchParams({ maVach })
+  const response = await fetch(`${url}/tra-ma-vach?${query}`)
+
+  if (response.status === 404) {
+    throw new Error(`Chưa có sản phẩm mang mã vạch ${maVach}.`)
+  }
+
+  if (!response.ok) {
+    throw new Error(`Không tra được sản phẩm (HTTP ${response.status}).`)
+  }
+
+  return response.json()
+}
+
 export async function luuSanPham(duLieu: DuLieuSanPham, id?: number): Promise<SanPham> {
   const dangSua = id !== undefined
 
-  const response = await fetch(dangSua ? `${url}/${id}` : url, {
+  const response = await guiYeuCauGhi(dangSua ? `${url}/${id}` : url, {
     method: dangSua ? 'PUT' : 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(duLieu),
