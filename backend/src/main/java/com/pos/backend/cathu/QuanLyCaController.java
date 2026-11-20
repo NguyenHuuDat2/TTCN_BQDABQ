@@ -335,7 +335,7 @@ public class QuanLyCaController {
 
             if (soPhien != null && soPhien > 0 && !cungNhanVien) {
                 throw loiTrung(
-                        "Ca này đã có phiên thu ngân. Không thể đổi nhân viên."
+                        "Ca này đã có nhân viên mở phiên thu ngân. Không thể thay đổi phân công."
                 );
             }
         }

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import MainLayout, { menuTheoVaiTro } from './layouts/MainLayout'
@@ -10,7 +11,9 @@ import TongQuanChiNhanhPage from './features/chi_nhanh/TongQuanChiNhanhPage'
 import CaThuNganPage from './features/ca_thu_ngan/CaThuNganPage'
 import DoiSoatCaPage from './features/ca_thu_ngan/DoiSoatCaPage'
 import QuanLyCaPage from './features/quan_ly_ca/QuanLyCaPage'
-
+import KhachHangPage from './features/khach_hang/KhachHangPage'
+import KhuyenMaiPage from './features/khuyen_mai/KhuyenMaiPage'
+import TonKhoPage from './features/ton_kho/TonKhoPage'
 import {
   dangXuat,
   layTaiKhoanHienTai,
@@ -51,7 +54,9 @@ export default function App() {
       } catch (error) {
         if (!controller.signal.aborted) {
           setLoi(
-            error instanceof Error ? error.message : 'Không kết nối được backend.',
+            error instanceof Error
+              ? error.message
+              : 'Không kết nối được backend.',
           )
         }
       } finally {
@@ -60,6 +65,7 @@ export default function App() {
     }
 
     void kiemTraPhien()
+
     return () => controller.abort()
   }, [])
 
@@ -69,7 +75,9 @@ export default function App() {
       setTaiKhoan(null)
     } catch (error) {
       window.alert(
-        error instanceof Error ? error.message : 'Không đăng xuất được.',
+        error instanceof Error
+          ? error.message
+          : 'Không đăng xuất được.',
       )
     }
   }
@@ -104,7 +112,10 @@ export default function App() {
           path="/dang-nhap"
           element={<DangNhapPage onDangNhap={setTaiKhoan} />}
         />
-        <Route path="*" element={<Navigate to="/dang-nhap" replace />} />
+        <Route
+          path="*"
+          element={<Navigate to="/dang-nhap" replace />}
+        />
       </Routes>
     )
   }
@@ -115,21 +126,30 @@ export default function App() {
   function noiDungTrang(path: string, label: string) {
     if (path === '/san-pham') return <SanPhamPage />
     if (path === '/ban-hang') return <BanHangPage />
-    if (path === '/tai-khoan') return <TaiKhoanPage/>
-    if (path === '/chi-nhanh') return <ChiNhanhPage/>
-    if (path === '/chi-nhanh/tong-quan') return <TongQuanChiNhanhPage />
+    if (path === '/tai-khoan') return <TaiKhoanPage />
+    if (path === '/chi-nhanh') return <ChiNhanhPage />
+    if (path === '/chi-nhanh/tong-quan') {
+      return <TongQuanChiNhanhPage />
+    }
     if (path === '/thu-ngan/ca') return <CaThuNganPage />
     if (path === '/thu-ngan/doi-soat') return <DoiSoatCaPage />
-    if (path === '/chi-nhanh/quan-ly-ca') {return <QuanLyCaPage />}
+    if (path === '/chi-nhanh/quan-ly-ca') return <QuanLyCaPage />
+    if (path === '/thu-ngan/khach-hang') return <KhachHangPage />
+    if (path === '/khuyen-mai') return <KhuyenMaiPage />
+    if (path === '/ton-kho') return <TonKhoPage />
 
-    
     return <TrangDangXayDung tenTrang={label} />
   }
 
   return (
     <Routes>
       <Route
-        element={<MainLayout taiKhoan={taiKhoan} onDangXuat={thoat} />}
+        element={
+          <MainLayout
+            taiKhoan={taiKhoan}
+            onDangXuat={thoat}
+          />
+        }
       >
         {menu.map((muc) => (
           <Route
@@ -139,7 +159,10 @@ export default function App() {
           />
         ))}
 
-        <Route path="*" element={<Navigate to={trangDau} replace />} />
+        <Route
+          path="*"
+          element={<Navigate to={trangDau} replace />}
+        />
       </Route>
     </Routes>
   )

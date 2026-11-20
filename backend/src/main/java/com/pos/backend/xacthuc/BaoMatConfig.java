@@ -1,4 +1,3 @@
-
 package com.pos.backend.xacthuc;
 
 import java.util.List;
@@ -79,7 +78,8 @@ public class BaoMatConfig {
 
                 .requestMatchers(
                         HttpMethod.GET,
-                        "/api/ban-hang/khach-hang"
+                        "/api/ban-hang/khach-hang",
+                        "/api/ban-hang/khuyen-mai"
                 ).hasRole("CASHIER")
 
                 .requestMatchers(
@@ -119,8 +119,50 @@ public class BaoMatConfig {
 
                 .requestMatchers(
                         HttpMethod.POST,
-                        "/api/quan-ly-ca/phan-cong"
+                        "/api/quan-ly-ca"
                 ).hasRole("MANAGER")
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/khach-hang",
+                        "/api/khach-hang/**"
+                ).hasAnyRole("ADMIN", "MANAGER", "CASHIER")
+
+                .requestMatchers(HttpMethod.POST, "/api/khach-hang")
+                        .hasAnyRole("ADMIN", "MANAGER", "CASHIER")
+
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/khach-hang/**"
+                ).hasAnyRole("ADMIN", "MANAGER")
+
+                .requestMatchers(
+                        HttpMethod.PATCH,
+                        "/api/khach-hang/**"
+                ).hasAnyRole("ADMIN", "MANAGER")
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/khuyen-mai",
+                        "/api/khuyen-mai/**"
+                ).hasAnyRole("ADMIN", "MANAGER")
+
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/khuyen-mai",
+                        "/api/khuyen-mai/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/khuyen-mai/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/ton-kho",
+                        "/api/ton-kho/**"
+                ).hasAnyRole("ADMIN", "MANAGER")
 
                 .requestMatchers("/api/**").denyAll()
                 .anyRequest().permitAll()

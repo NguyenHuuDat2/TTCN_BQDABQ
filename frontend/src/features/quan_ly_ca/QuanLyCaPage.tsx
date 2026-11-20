@@ -70,6 +70,7 @@ export default function QuanLyCaPage() {
   const [dangLuu, setDangLuu] = useState<string | null>(null)
 
   const [loi, setLoi] = useState('')
+  const [loiLaCanhBao, setLoiLaCanhBao] = useState(false)
   const [thongBao, setThongBao] = useState('')
 
   const ngayQua = ngay < ngayHomNay()
@@ -80,6 +81,7 @@ export default function QuanLyCaPage() {
     async function taiDuLieu() {
       setDangTai(true)
       setLoi('')
+      setLoiLaCanhBao(false)
 
       try {
         const [dsNhanVien, dsCa] = await Promise.all([
@@ -104,6 +106,7 @@ export default function QuanLyCaPage() {
       } catch (error) {
         if (!controller.signal.aborted) {
           setLoi(loiTu(error))
+          setLoiLaCanhBao(false)
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -124,10 +127,12 @@ export default function QuanLyCaPage() {
 
     if (!idNhanVien) {
       setLoi(`Vui lòng chọn thu ngân cho ${tenLoaiCa(ca.loaiCa)}.`)
+      setLoiLaCanhBao(false)
       return
     }
 
     setLoi('')
+    setLoiLaCanhBao(false)
     setThongBao('')
     setDangLuu(ca.loaiCa)
 
@@ -155,7 +160,34 @@ export default function QuanLyCaPage() {
         `Đã phân công ${ketQua.tenThuNgan} vào ${tenLoaiCa(ca.loaiCa)} ngày ${hienNgay(ngay)}.`,
       )
     } catch (error) {
-      setLoi(loiTu(error))
+      let thongDiep = loiTu(error)
+      let laCanhBao = false
+
+      try {
+        const dsCaMoi = await layDanhSachCa(ngay)
+        setDanhSachCa(dsCaMoi)
+
+        const caMoi = dsCaMoi.find(
+          (item) => item.loaiCa === ca.loaiCa,
+        )
+
+        if (caMoi) {
+          setNhanVienChon((ds) => ({
+            ...ds,
+            [ca.loaiCa]: String(caMoi.idTaiKhoanThuNgan ?? ''),
+          }))
+        }
+
+        if (caMoi?.coPhien) {
+          thongDiep =
+            'Ca này đã có nhân viên mở phiên thu ngân nên không thể thay đổi phân công. Vui lòng giữ nguyên nhân viên phụ trách.'
+          laCanhBao = true
+        }
+      } catch {
+      }
+
+      setLoi(thongDiep)
+      setLoiLaCanhBao(laCanhBao)
     } finally {
       setDangLuu(null)
     }
@@ -185,7 +217,10 @@ export default function QuanLyCaPage() {
       </div>
 
       {loi && (
-        <div className="alert alert-danger" role="alert">
+        <div
+          className={`alert ${loiLaCanhBao ? 'alert-warning' : 'alert-danger'}`}
+          role="alert"
+        >
           {loi}
         </div>
       )}
@@ -212,6 +247,7 @@ export default function QuanLyCaPage() {
                 onChange={(event) => {
                   setNgay(event.target.value)
                   setLoi('')
+                  setLoiLaCanhBao(false)
                   setThongBao('')
                 }}
               />
@@ -225,6 +261,7 @@ export default function QuanLyCaPage() {
                   onClick={() => {
                     setNgay(ngayHomNay())
                     setLoi('')
+                    setLoiLaCanhBao(false)
                     setThongBao('')
                   }}
                 >
@@ -324,6 +361,7 @@ export default function QuanLyCaPage() {
                         }))
                         setThongBao('')
                         setLoi('')
+                        setLoiLaCanhBao(false)
                       }}
                     >
                       <option value="">
